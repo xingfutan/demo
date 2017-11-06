@@ -11,11 +11,11 @@
           <div class="title">蓝方</div>
           <div class="list">
             <ul>
-              <li><img src="a.png"/>白金</li>
-              <li><img src="a.png"/>白金</li>
-              <li><img src="a.png"/>白金</li>
-              <li><img src="a.png"/>白金</li>
-              <li><img src="a.png"/>白金</li>
+              <li><img src="logo.png"/>白金</li>
+              <li><img src="logo.png"/>白金</li>
+              <li><img src="logo.png"/>白金</li>
+              <li><img src="logo.png"/>白金</li>
+              <li><img src="logo.png"/>白金</li>
             </ul>
           </div>
           <div class="margin30">1.5倍</div>
@@ -30,11 +30,11 @@
           <div class="title">红方</div>
           <div class="list">
             <ul>
-              <li>白金<img src="a.png"/></li>
-              <li>白金<img src="a.png"/></li>
-              <li>白金<img src="a.png"/></li>
-              <li>白金<img src="a.png"/></li>
-              <li>白金<img src="a.png"/></li>
+              <li>白金<img src="logo.png"/></li>
+              <li>白金<img src="logo.png"/></li>
+              <li>白金<img src="logo.png"/></li>
+              <li>白金<img src="logo.png"/></li>
+              <li>白金<img src="logo.png"/></li>
             </ul>
           </div>
           <div class="margin30">1.2倍</div>

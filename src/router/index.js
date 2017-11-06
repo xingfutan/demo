@@ -2,10 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import HelloWorld from '@/components/HelloWorld'
 import KManagement from '@/components/KManagement'
-import KGive from '@/components/KGive'
-import KRecharge from '@/components/KRecharge'
 import KCharm from '@/components/KCharm'
 import KBadge from '@/components/KBadge'
 import KCompetition from '@/components/KCompetition'
@@ -24,23 +21,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: HelloWorld
-    },
-    {
-      path: '/management',
       name: 'KManagement',
       component: KManagement
-    },
-    {
-      path: '/give',
-      name: 'KGive',
-      component: KGive
-    },
-    {
-      path: '/recharge',
-      name: 'KRecharge',
-      component: KRecharge
     },
     {
       path: '/charm',
