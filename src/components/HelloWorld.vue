@@ -29,9 +29,8 @@ export default {
     }
   },
   beforeMount() {
-    this.axios.get('http://localhost:3000/?url=http://111.230.135.221:3000/generateToken').then(console.log);
+    this.axios.get('/user/top/gold').then(console.log).catch(console.log);
   }
-
 }
 </script>
 
