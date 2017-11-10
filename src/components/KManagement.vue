@@ -26,163 +26,7 @@
       <router-link class="nav-item" to="/ranking">排行榜</router-link>
       <router-link class="nav-item" to="/competition">竞猜</router-link>
     </div>
-
-    <div v-show='show_charging'>
-      <button id="show-modal">赠送</button>
-      <transition name="modal">
-        <div class="modal-mask">
-          <div class="modal-wrapper">
-            <div class="modal-container">
-
-              <div class="modal-header">
-                <slot name="header">
-                  在线充值
-                </slot>
-              </div>
-
-              <div class="modal-body">
-                <slot name="body">
-                  <div class="give_body_container">
-                    <div class="give_body_active">
-                      <div class="give_body_div">
-                        <div>2000K币</div>
-                        <div>200元</div>
-                        <div>赠1个月</div>
-                        <div>青铜会员</div>
-                      </div>
-                    </div>
-                    <div class="give_body">
-                      <div class="give_body_div">
-                        <div>4000K币</div>
-                        <div>400元</div>
-                        <div>赠1个月</div>
-                        <div>钻石会员</div>
-                      </div>
-                    </div>
-                    <div class="give_body">
-                      <div class="give_body_div">
-                        <div>6000K币</div>
-                        <div>600元</div>
-                        <div>赠1个月</div>
-                        <div>王者会员</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="text_left">
-                    <div>王者会员特权：</div>
-                    <div>
-                      每日获赠50K币，自动发放至会员所在店铺的账户中，可用于现场消费。
-                    </div>
-                  </div>
-                  <div class="text_left">
-                    <div>自定义充值金额</div>
-                    <input type="text" placeholder="请输入充值金额"/>
-                  </div>
-                  <div class="text_left">
-                    <input type='radio'/>青铜会员
-                    <input type='radio'/>钻石会员
-                    <input type='radio'/>王者会员
-                  </div>
-                </slot>
-              </div>
-
-              <div class="modal-footer">
-                <slot name="footer">
-                  <button class="modal-default-button" @click="show_charging = false">
-                    确认充值
-                  </button>
-                </slot>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </transition>
-    </div>
-    <div v-show='show_give'>
-      <transition name="modal">
-        <div class="modal-mask">
-          <div class="modal-wrapper">
-            <div class="modal-container">
-              <div class="modal-header">
-                <slot name="header">
-                  赠送魅力星辰
-                </slot>
-              </div>
-
-              <div class="modal-body">
-                <slot name="body">
-                  <div class="give_body_container">
-                    <div class="give_body">
-                      <div class="give_body_div">
-                        <div><img src="logo.png"/></div>
-                        <div>1</div>
-                        <div>星尘</div>
-                        <div>2k币</div>
-                      </div>
-                    </div>
-                    <div class="give_body">
-                      <div class="give_body_div">
-                        <div><img src="logo.png"/></div>
-                        <div>1</div>
-                        <div>星尘</div>
-                        <div>2k币</div>
-                      </div>
-                    </div>
-                    <div class="give_body">
-                      <div class="give_body_div">
-                        <div><img src="logo.png"/></div>
-                        <div>1</div>
-                        <div>星尘</div>
-                        <div>2k币</div>
-                      </div>
-                    </div>
-                    <div class="give_body">
-                      <div class="give_body_div">
-                        <div><img src="logo.png"/></div>
-                        <div>1</div>
-                        <div>星尘</div>
-                        <div>2k币</div>
-                      </div>
-                    </div>
-                    <div class="give_body">
-                      <div class="give_body_div">
-                        <div><img src="logo.png"/></div>
-                        <div>1</div>
-                        <div>星尘</div>
-                        <div>2k币</div>
-                      </div>
-                    </div>
-                    <div class="give_body">
-                      <div class="give_body_div">
-                        <div><img src="logo.png"/></div>
-                        <div>1</div>
-                        <div>星尘</div>
-                        <div>2k币</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <br>
-                  <div>
-                    接收人：<input type='text' placeholder="请输入会员卡号">
-                    <span>蔡金生</span>
-                  </div>
-                </slot>
-              </div>
-
-              <div class="modal-footer">
-                <slot name="footer">
-                  <button class="modal-default-button" @click="show_give =false">
-                    确认赠送
-                  </button>
-                </slot>
-              </div>
-            </div>
-          </div>
-        </div>
-      </transition>
-    </div>
+    <give :visible.sync='show_give' @hide-give= 'show_give = false'></give>
   </div>
 </template>
 <style>
@@ -512,8 +356,12 @@
   }
 </style>
 <script>
+  import Give from './KGive.vue'
   export default {
-    name: 'HelloWorld',
+    name: 'management',
+    components: {
+      Give,
+    },
     data () {
       return {
         balance_count: '***',
