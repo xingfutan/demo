@@ -1,4 +1,4 @@
-let GameLv = {
+export const GAMELV = {
   '1':'倔强青铜IV',
   '2':'倔强青铜III',
   '3':'倔强青铜II',
@@ -17,12 +17,12 @@ let GameLv = {
   '16':'尊贵铂金I'
 }
 
-
-let gifts = {
+export const GIFT = {
   '1':{charm:10,gold:2},
   '2':{charm:80,gold:10},
   '3':{charm:450,gold:50},
   '4':{charm:990,gold:99},
   '5':{charm:520,gold:520},
   '6':{charm:13140,gold:1314}
-};
+}
+

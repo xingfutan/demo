@@ -3,7 +3,7 @@
     <header><h1>魅力榜</h1></header>
 
     <div class="portrait">
-      <div class="portrait_div" v-if='ranking2'>
+      <div class="portrait_div">
         <div>头像</div>
         <div>{{ranking2.mb_nickname}}</div>
         <div>第二名</div>
@@ -11,7 +11,7 @@
           <button>赠送</button>
         </div>
       </div>
-      <div class="portrait_div" v-if='ranking1'>
+      <div class="portrait_div">
         <div>头像</div>
         <div>{{ranking1.mb_nickname}}</div>
         <div>第一名</div>
@@ -19,9 +19,9 @@
           <button>赠送</button>
         </div>
       </div>
-      <div class="portrait_div" v-if='ranking3'>
+      <div class="portrait_div">
         <div>头像</div>
-        <div>{{ranking3.mb_nickname}}</div>
+        <div>{{ranking3.mb_nickname || '无'}}</div>
         <div>第三名</div>
         <div>
           <button>赠送</button>
@@ -64,9 +64,9 @@
           if (result.data && result.data.code === 200) {
             console.log(type)
             this.type = type;
-            this.ranking1 = result.data.data[0];
-            this.ranking2 = result.data.data[1];
-            this.ranking3 = result.data.data[2];
+            this.ranking1 = result.data.data[0] || {};
+            this.ranking2 = result.data.data[1] || {};
+            this.ranking3 = result.data.data[2] || {};
             this.rankingOther = result.data.data.slice(3);
           }
         }).catch(window.alert);
