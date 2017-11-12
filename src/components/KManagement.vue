@@ -15,7 +15,7 @@
       <div id='ranking-more'>查看完整排名</div>
     </div>
     <div class="nav">
-      <div class="nav-item" @click="show_charging = true">充值</div>
+      <div class="nav-item" @click="show_recharge = true">充值</div>
       <div class="nav-item" @click="show_give = true">赠送</div>
     </div>
     <div class="nav">
@@ -27,6 +27,7 @@
       <router-link class="nav-item" to="/competition">竞猜</router-link>
     </div>
     <give :visible.sync='show_give' @hide-give= 'show_give = false'></give>
+    <recharge :visible.sync='show_recharge' @hide-recharge= 'show_recharge = false'></recharge>
   </div>
 </template>
 <style>
@@ -356,18 +357,20 @@
   }
 </style>
 <script>
-  import Give from './KGive.vue'
+  import Give from './GiveGold.vue'
+  import Recharge from './Recharge.vue'
   export default {
     name: 'management',
     components: {
       Give,
+      Recharge,
     },
     data () {
       return {
         balance_count: '***',
         balance_time: '***',
         ranking_prize: '***',
-        show_charging: false,
+        show_recharge: false,
         show_give: false,
       }
     },

@@ -6,22 +6,13 @@
           <div class="modal-container">
             <div class="modal-header">
               <slot name="header">
-                赠送魅力星辰
+                赠送K币
               </slot>
             </div>
             <div class="modal-body">
               <slot name="body">
-                <div class="give_body_container">
-                  <div v-for='(option, index) in options'
-                       v-bind:class="{give_body: !option.onSelect, give_body_active: option.onSelect}"
-                       @click="onSelect(index)">
-                    <div class="give_body_div">
-                      <div><img src="../assets/a.png"/></div>
-                      <div>{{option.dust}}</div>
-                      <div>星尘</div>
-                      <div>{{option.kCorn}}k币</div>
-                    </div>
-                  </div>
+                <div>
+                  k  币：<input type='text' placeholder="请输入K币数量" v-model="kCorn">
                 </div>
                 <br>
                 <div>
@@ -56,33 +47,14 @@
     },
     data() {
       return {
-        dust: 0,
-        kCorn: 0,
-        user_name: '',
-        member_id: '',
-        options: [
-          { onSelect: false, dust: 1, kCorn: 2 },
-          { onSelect: false, dust: 8, kCorn: 10 },
-          { onSelect: false, dust: 45, kCorn: 50 },
-          { onSelect: false, dust: 99, kCorn: 99 },
-          { onSelect: false, dust: 520, kCorn: 520 },
-          { onSelect: false, dust: 1314, kCorn: 1314 }
-        ]
+        kCorn: null,
+        user_name: null,
+        member_id: null
       }
     },
     methods: {
       hideModal() {
         this.$emit('hide-give')
-      },
-      onSelect(j) {
-        this.options.forEach((o, i) => {
-          if (o.onSelect) {
-            this.options[i].onSelect = false;
-          }
-        })
-        this.options[j].onSelect = true;
-        this.dust = this.options[j].dust;
-        this.kCorn = this.options[j].kCorn;
       },
       getUserName() {
         this.user_name = '';
@@ -96,10 +68,10 @@
         }
       },
       give() {
-        const body = {toUser: this.member_id, giftId: getGiftId(this.options)}
+        const body = {toUser: this.member_id, gold: this.kCorn}
         if(!body.toUser) return window.alert('请输入赠送用户id')
-        if(!body.giftId) return window.alert('请选择对应的礼包')
-        this.axios.post(`/user/giveGift`, body).then(result => {
+        if(!body.gold) return window.alert('请输入赠送k币数量')
+        this.axios.post(`/user/giveGold`, body).then(result => {
           if (result.data && result.data.code === 200) {
             if(result.data.status === 'OK') window.alert('赠送成功')
             else window.alert(result.data.msg)
@@ -108,13 +80,6 @@
           }
           this.hideModal()
         }).catch(window.alert);
-        function getGiftId(options) {
-          for (let i = 0; i < options.length; i++){
-            if(options[i].onSelect){
-              return i + 1;
-            }
-          }
-        }
       }
     }
   }

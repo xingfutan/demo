@@ -4,40 +4,65 @@
       <div class="modal-mask">
         <div class="modal-wrapper">
           <div class="modal-container">
+
             <div class="modal-header">
               <slot name="header">
-                赠送魅力星辰
+                在线充值
               </slot>
             </div>
+
             <div class="modal-body">
               <slot name="body">
                 <div class="give_body_container">
-                  <div v-for='(option, index) in options'
-                       v-bind:class="{give_body: !option.onSelect, give_body_active: option.onSelect}"
-                       @click="onSelect(index)">
+                  <div v-bind:class="{give_body: !onSelect[0], give_body_active: onSelect[0]}" @click="select(0)">
                     <div class="give_body_div">
-                      <div><img src="../assets/a.png"/></div>
-                      <div>{{option.dust}}</div>
-                      <div>星尘</div>
-                      <div>{{option.kCorn}}k币</div>
+                      <div>2000K币</div>
+                      <div>200元</div>
+                      <div>赠1个月</div>
+                      <div>青铜会员</div>
+                    </div>
+                  </div>
+                  <div v-bind:class="{give_body: !onSelect[1], give_body_active: onSelect[1]}" @click="select(1)">
+                    <div class="give_body_div">
+                      <div>4000K币</div>
+                      <div>400元</div>
+                      <div>赠1个月</div>
+                      <div>钻石会员</div>
+                    </div>
+                  </div>
+                  <div v-bind:class="{give_body: !onSelect[2], give_body_active: onSelect[2]}" @click="select(2)">
+                    <div class="give_body_div">
+                      <div>6000K币</div>
+                      <div>600元</div>
+                      <div>赠1个月</div>
+                      <div>王者会员</div>
                     </div>
                   </div>
                 </div>
-                <br>
-                <div>
-                  接收人：<input type='text' placeholder="请输入会员卡号" v-model="member_id" @input="getUserName">
-                  <span>{{user_name}}</span>
+                <div class="text_left">
+                  <div>王者会员特权：</div>
+                  <div>
+                    每日获赠50K币，自动发放至会员所在店铺的账户中，可用于现场消费。
+                  </div>
+                </div>
+                <div class="text_left">
+                  <div>自定义充值金额</div>
+                  <input type="text" placeholder="请输入充值金额" v-model='charge_num' @focus='custom' @input= "getMessage" @blur="getMessage"/>
+                </div>
+                <div class="text_left">
+                  {{message}}
                 </div>
               </slot>
             </div>
 
             <div class="modal-footer">
               <slot name="footer">
-                <button class="modal-default-button" @click="give">
-                  确认赠送
+                <button class="modal-default-button" @click="recharge">
+                  确认充值
                 </button>
               </slot>
             </div>
+
           </div>
         </div>
       </div>
@@ -47,7 +72,7 @@
 
 <script>
   export default {
-    name: 'give',
+    name: 'recharge',
     props: {
       visible: {
         type: Boolean,
@@ -56,69 +81,59 @@
     },
     data() {
       return {
-        dust: 0,
-        kCorn: 0,
-        user_name: '',
-        member_id: '',
-        options: [
-          { onSelect: false, dust: 1, kCorn: 2 },
-          { onSelect: false, dust: 8, kCorn: 10 },
-          { onSelect: false, dust: 45, kCorn: 50 },
-          { onSelect: false, dust: 99, kCorn: 99 },
-          { onSelect: false, dust: 520, kCorn: 520 },
-          { onSelect: false, dust: 1314, kCorn: 1314 }
-        ]
+        charge_num: 0,
+        message: '',
+        type: 2,
+        fee: 0,
+        productId: 1,
+        onSelect: [true, false, false],
+        memberShip: [0, 0, 0]
       }
     },
     methods: {
       hideModal() {
-        this.$emit('hide-give')
+        this.$emit('hide-recharge')
       },
-      onSelect(j) {
-        this.options.forEach((o, i) => {
-          if (o.onSelect) {
-            this.options[i].onSelect = false;
-          }
-        })
-        this.options[j].onSelect = true;
-        this.dust = this.options[j].dust;
-        this.kCorn = this.options[j].kCorn;
+      select(j) {
+        this.onSelect = this.onSelect.map(o => false)
+        this.onSelect[j] = true
+        this.type = 2
+        this.productId = j + 1
       },
-      getUserName() {
-        this.user_name = '';
-        if (this.member_id) {
-          this.axios.get(`/user/${this.member_id}/nickname`).then(result => {
-            if (result.data && result.data.code === 200) {
-              if(result.data.data && result.data.data.exist) this.user_name = result.data.data.nickname
-              else this.user_name = '用户不存在'
-            }
-          }).catch(window.alert);
+      custom() {
+        this.onSelect = this.onSelect.map(o => false)
+        this.type = 1
+      },
+      getMessage() {
+        if (this.type !== 1) return this.message = '';
+        this.memberShip[0] = parseInt(this.charge_num / 600)
+        this.memberShip[1] = parseInt((this.charge_num % 600) / 400)
+        this.memberShip[2] = parseInt(((this.charge_num % 600) % 400) / 200)
+        const mesArray = [];
+        if(this.memberShip[0]) mesArray.push(`${this.memberShip[0]}个月王者会员`)
+        if(this.memberShip[1]) mesArray.push(`${this.memberShip[1]}个月钻石会员`)
+        if(this.memberShip[2]) mesArray.push(`${this.memberShip[2]}个月青铜会员`)
+        this.message = `${mesArray.join(',')}`
+        this.fee = this.charge_num;
+      },
+      recharge(){
+        const body = {type: this.type}
+        if(this.type === 2){
+          body.product_id = this.productId
+        }else {
+          body.fee = this.fee
         }
-      },
-      give() {
-        const body = {toUser: this.member_id, giftId: getGiftId(this.options)}
-        if(!body.toUser) return window.alert('请输入赠送用户id')
-        if(!body.giftId) return window.alert('请选择对应的礼包')
-        this.axios.post(`/user/giveGift`, body).then(result => {
+        this.axios.post('/order/buyGoldPay', body).then(result => {
           if (result.data && result.data.code === 200) {
-            if(result.data.status === 'OK') window.alert('赠送成功')
-            else window.alert(result.data.msg)
-          }else {
             window.alert(result.data.msg)
+            this.hideModal()
           }
-          this.hideModal()
         }).catch(window.alert);
-        function getGiftId(options) {
-          for (let i = 0; i < options.length; i++){
-            if(options[i].onSelect){
-              return i + 1;
-            }
-          }
-        }
       }
     }
   }
 </script>
+
 <style>
   .modal-mask {
     position: fixed;
@@ -205,12 +220,13 @@
 
   .give_body_container .give_body .give_body_div div:first-child {
     height: 1.4rem;
-    display: flex;
+    line-height: 1.4rem;
+    font-size: 0.56rem;
+    font-weight: bold;
   }
 
   .give_body_container .give_body .give_body_div div:nth-child(4) {
-    text-align: right;
-    margin-right: 0.2rem;
+
   }
 
   .give_body_container .give_body_active .give_body_div {
@@ -224,12 +240,13 @@
 
   .give_body_container .give_body_active .give_body_div div:first-child {
     height: 1.4rem;
-    display: flex;
+    line-height: 1.4rem;
+    font-size: 0.56rem;
+    font-weight: bold;
   }
 
-  .give_body_container .give_body_active .give_body_div div:nth-child(4) {
-    text-align: right;
-    margin-right: 0.2rem;
+  .text_left {
+    text-align: left;
   }
 
   /*
