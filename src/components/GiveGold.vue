@@ -38,7 +38,7 @@
 
 <script>
   export default {
-    name: 'give',
+    name: 'giveGold',
     props: {
       visible: {
         type: Boolean,

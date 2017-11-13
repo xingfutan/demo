@@ -26,7 +26,7 @@
       <router-link class="nav-item" to="/ranking">排行榜</router-link>
       <router-link class="nav-item" to="/competition">竞猜</router-link>
     </div>
-    <give :visible.sync='show_give' @hide-give= 'show_give = false'></give>
+    <give-gold :visible.sync='show_give' @hide-give= 'show_give = false'></give-gold>
     <recharge :visible.sync='show_recharge' @hide-recharge= 'show_recharge = false'></recharge>
   </div>
 </template>
@@ -357,12 +357,12 @@
   }
 </style>
 <script>
-  import Give from './GiveGold.vue'
+  import GiveGold from './GiveGold.vue'
   import Recharge from './Recharge.vue'
   export default {
     name: 'management',
     components: {
-      Give,
+      GiveGold,
       Recharge,
     },
     data () {
