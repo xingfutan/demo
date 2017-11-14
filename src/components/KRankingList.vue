@@ -118,7 +118,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
   .title {
     height: 140px;
     border-bottom: 2px solid #03587C;

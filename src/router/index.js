@@ -7,6 +7,7 @@ import KCharm from '@/components/KCharm'
 import KBadge from '@/components/KBadge'
 import KCompetition from '@/components/KCompetition'
 import KRankingList from '@/components/KRankingList'
+import Nav from '@/components/Nav'
 
 
 Vue.use(Router)
@@ -21,6 +22,11 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'Nav',
+      component: Nav
+    },
+    {
+      path: '/management',
       name: 'KManagement',
       component: KManagement
     },
