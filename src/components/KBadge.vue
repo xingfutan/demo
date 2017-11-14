@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="title">
+      <div class="title-text">魅力星尘</div>
+    </div>
     <div id='badge' class="badge">
       <img src='../assets/a.png'>
       <div class="badge-info">
@@ -9,59 +12,75 @@
     </div>
     <div class="badge-num">
       <div>K币余额：{{gold}}</div>
-      <div>魅力值：{{charm}}</div>
-      <div>战力值：{{attack}}</div>
+      <div>魅 力 值：{{charm}}</div>
+      <div>战 力 值：{{attack}}</div>
     </div>
     <div class="badge-join">
       <div><u>加入{{level}}群</u></div>
     </div>
-    <div class="nav">
-      <router-link class="nav-item" to="/charm">魅力</router-link>
-      <router-link class="nav-item" to="/">K币</router-link>
-    </div>
-    <div class="nav">
-      <router-link class="nav-item" to="/ranking">排行榜</router-link>
-      <router-link class="nav-item" to="/competition">竞猜</router-link>
-    </div>
   </div>
 </template>
-<style>
+<style scoped>
+  .title {
+    height: 140px;
+    border-bottom:2px solid #03587C;
+  }
+
+  .title-text {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%);
+    transform: translateX(-50%);
+    width: 160px;
+    height: 40px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #FFF;
+    border: 2px solid #FFF;
+    border-radius: 20px;
+  }
   .badge {
-    margin-top: 0.3rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
+    height: 300px;
+    margin-top: 40px;
+    margin-left: 10%;
+    margin-right: 10%;
     border: 2px solid #ccc;
     border-radius: 25px;
-    height: 3rem;
   }
 
   .badge img {
     display: inline;
     float: left;
     border: 2px solid #ccc;
-    margin-left: 1rem;
-    margin-top: 0.3rem;
+    margin-left: 40px;
+    margin-top: 30px;
+    width: 150px;
+    height: 150px;
   }
 
   .badge .badge-info {
     display: inline;
     float: left;
-    margin-left: 1rem;
-    margin-top: 0.3rem;
+    margin-left: 10%;
+    margin-top: 40px;
   }
 
   #badge-level {
     font-size: 40px;
     text-align: left;
+    color: #ffffff;
   }
 
   #badge-nickname {
     font-size: 40px;
+    color: #ffffff;
   }
 
   .badge-num {
-    margin-top: 0.3rem;
-    margin-left: 1rem;
+    margin-top: 40px;
+    margin-left: 10%;
+    color: #ffffff;
     float: left;
   }
 
@@ -71,8 +90,8 @@
   }
 
   .badge-join{
-    margin-top: 0.3rem;
-    margin-left: 1rem;
+    margin-top: 40px;
+    margin-left: 10%;
     float: left;
     clear: both;
   }
@@ -81,32 +100,6 @@
     color: blue;
     float: left;
     text-decoration: blue;
-  }
-
-
-
-
-  .nav {
-    clear: both;
-    height: 80px;
-    line-height: 80px;
-    display: flex;
-    text-align: center;
-  }
-
-  .nav-item {
-    flex: 1;
-    text-decoration: none;
-  }
-
-  .nav-item:link, .nav-item:visited {
-    background-color: white;
-    color: black;
-  }
-
-  .nav-item:hover, .nav-item:active {
-    color: white;
-    background-color: #C8C6C6;
   }
 
 </style>
