@@ -30,10 +30,10 @@
     position: relative;
     top: 50%;
     left: 50%;
-    transform: translateY(-50%);
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     width: 160px;
     height: 40px;
+    line-height: 40px;
     font-size: 20px;
     font-weight: bold;
     color: #FFF;

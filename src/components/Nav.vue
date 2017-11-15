@@ -7,7 +7,7 @@
     <router-link class="nav-item" to="/competition">竞猜</router-link>
   </div>
 </template>
-<style>
+<style scoped>
   .nav {
     height: 80px;
     line-height: 80px;
@@ -18,12 +18,14 @@
   }
 
   .nav-item {
-    height: 80px;
-    line-height: 80px;
+    height: 260px;
+    line-height: 260px;
+    font-size: 60px;
     width: 100%;
     display: inline;
     float:left;
     text-decoration: none;
+    border: 2px solid #000000;
 
   }
 

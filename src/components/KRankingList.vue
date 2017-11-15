@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="title">
-      <div class="title-text">魅力星尘</div>
+      <div class="title-text">排行榜</div>
     </div>
     <div class="header">魅力榜</div>
     <div class="portrait">
@@ -119,6 +119,7 @@
   }
 </script>
 <style scoped>
+
   .title {
     height: 140px;
     border-bottom: 2px solid #03587C;
@@ -231,6 +232,8 @@
     float: left;
     width: 45%;
     font-size: 20px;
+    text-overflow: ellipsis;
+    white-space:nowrap;
     overflow: hidden;
   }
 
