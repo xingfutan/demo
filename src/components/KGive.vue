@@ -8,6 +8,9 @@
               <slot name="header">
                 赠送魅力星辰
               </slot>
+              <div class="close-icon" @click="hideModal">
+                <img src="../assets/close.png"/>
+              </div>
             </div>
             <div class="modal-body">
               <slot name="body">
@@ -152,7 +155,10 @@
     margin-top: 0;
     color: #42b983;
     text-align: left;
+    width: auto;
     border-bottom: 1px solid #ccc;
+    font-size: 50px;
+    line-height: 40px;
   }
 
   .modal-body {
@@ -253,5 +259,15 @@
   .modal-leave-active .modal-container {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
+  }
+
+  .close-icon {
+    display: inline;
+    float: right;
+   }
+
+  .close-icon img{
+    width: 40px;
+    height: 40px;
   }
 </style>
