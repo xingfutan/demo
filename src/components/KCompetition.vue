@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <scroller :on-infinite="infinite">
     <div class="title">
       <div class="title-text">排行榜</div>
     </div>
@@ -15,7 +16,7 @@
         <div class="vs-left">
           <div class="vs-left-title">蓝方</div>
           <div class="vs-left-list">
-            <ul>
+            <ul v-if="game.members && game.members.length">
               <li><img class="vs-icon" :src="game.members[0].mb_avatar_url"/>{{game.members[0].mb_nickname}}</li>
               <li><img class="vs-icon" :src="game.members[1].mb_avatar_url"/>{{game.members[1].mb_nickname}}</li>
               <li><img class="vs-icon" :src="game.members[2].mb_avatar_url"/>{{game.members[2].mb_nickname}}</li>
@@ -34,7 +35,7 @@
         <div class="vs-right">
           <div class="vs-right-title">红方</div>
           <div class="vs-right-list">
-            <ul>
+            <ul v-if="game.members && game.members.length">
               <li>{{game.members[5].mb_nickname}}<img class="vs-icon" :src="game.members[5].mb_avatar_url"/></li>
               <li>{{game.members[6].mb_nickname}}<img class="vs-icon" :src="game.members[6].mb_avatar_url"/></li>
               <li>{{game.members[7].mb_nickname}}<img class="vs-icon" :src="game.members[7].mb_avatar_url"/></li>
@@ -47,7 +48,7 @@
         </div>
       </div>
     </div>
-
+    </scroller>
   </div>
 </template>
 <style scoped>
@@ -183,10 +184,12 @@
   }
 
   .vs-left-list {
+    height: 500px;
     margin-top: 10px;
   }
 
   .vs-right-list {
+    height: 500px;
     margin-top: 10px;
   }
 
@@ -215,25 +218,35 @@
     height: 50px;
     line-height: 50px;
     text-align: center;
-    border: 1px solid #ffffff;
+    border: 2px solid #ffffff;
+    border-radius: 20px;
+  }
+
+  .game-list {
+    margin-top: 560px;
   }
 </style>
 <script>
+  import Waterfall from 'vue-waterfall/lib/waterfall'
+  import WaterfallSlot from 'vue-waterfall/lib/waterfall-slot'
   import Give from './KGive.vue'
   export default {
     data () {
       return {
         games: [],
         gold: '',
+        page: 1
       }
     },
     components: {
       Give,
+      Waterfall,
+      WaterfallSlot
     },
     beforeMount() {
-      this.axios.get('/user/gameRoomInfo').then(result => {
+      this.axios.get('/user/gameRoomInfo', {params: {page_index: this.page, page_size: 10}}).then(result => {
         if (result.data && result.data.code === 200) {
-          this.games = result.data.data;
+          this.games = result.data.data.list;
         }
       }).catch(window.alert);
       this.axios.get('/user/gold').then(result => {
@@ -242,11 +255,54 @@
         }
       }).catch(window.alert);
     },
-    methods: {
-      getStatus(status){
-        const STATUS = ['未开始', '进行中', '已结束', '已结算'];
-        return STATUS[status] || '状态异常';
+    sockets:{
+      connect: function(){
+        console.log('socket connected')
+      },
+      stopBet: function(val){
+        console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)', val)
+      },
+      gameOver: function(val){
+        console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)', val)
+      },
+      error:function(val){
+        console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)', val)
       }
+    },
+    methods: {
+      infinite(done){
+        if(!this.page) return done(true)
+        this.axios.get('/user/gameRoomInfo', {params: {page_index: this.page + 1, page_size: 10}}).then(result => {
+          if (result.data && result.data.code === 200) {
+            console.log(result.data.data.list.length)
+            this.games = this.games.concat(result.data.data.list)
+            console.log(this.games.length)
+            this.page += 1
+            if(result.data.data.list.length < 10){
+              this.page = null
+            }
+            done()
+          }
+        }).catch(window.alert);
+      },
+      getStatus(status){
+        switch (status) {
+          case 1:
+            return '未开始'
+            break
+          case 2:
+            return '进行中'
+            break
+          case 3:
+            return '已结束'
+            break
+          case 4:
+            return '已结算'
+            break
+          default:
+            return '异常'
+        }
+      },
     }
   }
 </script>
