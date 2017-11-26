@@ -17,7 +17,7 @@
       <div class="info-board-more ranking-more">查看完整排名</div>
     </div>
     <div class="nav">
-      <div class="nav-item nav-item-left" @click="show_exchange = true">兑换</div>
+      <div class="nav-item nav-item-left" @click="$router.push('/gift')">兑换</div>
       <div class="nav-item nav-item-right" @click="show_give = true">赠送</div>
     </div>
   <give :visible.synv='show_give' @hide-give= 'show_give = false'></give>
