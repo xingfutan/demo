@@ -24,8 +24,8 @@
               <li><img class="vs-icon" :src="game.members[4].mb_avatar_url"/>{{game.members[4].mb_nickname}}</li>
             </ul>
           </div>
-          <div class="vs-rate">1.5倍</div>
-          <div class="vs-win">蓝方胜</div>
+          <div class="vs-rate">{{game.rateBlue}}倍</div>
+          <div class="vs-win" @click="userBet(game.r_id, 'blue')">蓝方胜</div>
         </div>
         <div class="vs-middle">
           <div class="vs-middle-title">{{getStatus(game.r_status)}}</div>
@@ -43,12 +43,13 @@
               <li>{{game.members[9].mb_nickname}}<img class="vs-icon" :src="game.members[9].mb_avatar_url"/></li>
             </ul>
           </div>
-          <div class="vs-rate">1.2倍</div>
-          <div class="vs-win">红方胜</div>
+          <div class="vs-rate">{{game.rateRed}}倍</div>
+          <div class="vs-win" @click="userBet(game.r_id, 'red')">红方胜</div>
         </div>
       </div>
     </div>
     </scroller>
+    <bet :visible.sync='showBet' :s_team='win' :s_room_id='room' @hide-give='showBet = false' ref='bet'></bet>
   </div>
 </template>
 <style scoped>
@@ -227,28 +228,27 @@
   }
 </style>
 <script>
-  import Waterfall from 'vue-waterfall/lib/waterfall'
-  import WaterfallSlot from 'vue-waterfall/lib/waterfall-slot'
-  import Give from './KGive.vue'
+  import Bet from './Bet.vue'
   export default {
     data () {
       return {
         games: [],
         gold: '',
-        page: 1
+        page: 0,
+        showBet: false,
+        room: '',
+        win: ''
       }
     },
     components: {
-      Give,
-      Waterfall,
-      WaterfallSlot
+      Bet,
     },
     beforeMount() {
-      this.axios.get('/user/gameRoomInfo', {params: {page_index: this.page, page_size: 10}}).then(result => {
-        if (result.data && result.data.code === 200) {
-          this.games = result.data.data.list;
-        }
-      }).catch(window.alert);
+//      this.axios.get('/user/gameRoomInfo', {params: {page_index: this.page, page_size: 10}}).then(result => {
+//        if (result.data && result.data.code === 200) {
+//          this.games = result.data.data.list;
+//        }
+//      }).catch(window.alert);
       this.axios.get('/user/gold').then(result => {
         if (result.data && result.data.code === 200) {
           this.gold = result.data.data.mb_gold;
@@ -260,7 +260,10 @@
         console.log('socket connected')
       },
       stopBet: function(val){
-        console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)', val)
+        const index = this._.findIndex(this.games, val)
+        if(index !== -1){
+          this.games[index].r_status = 2
+        }
       },
       gameOver: function(val){
         console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)', val)
@@ -270,8 +273,13 @@
       }
     },
     methods: {
+      userBet(id, win){
+        this.room = id
+        this.win = win
+        this.showBet = true
+      },
       infinite(done){
-        if(!this.page) return done(true)
+        if(this.page === null) return done(true)
         this.axios.get('/user/gameRoomInfo', {params: {page_index: this.page + 1, page_size: 10}}).then(result => {
           if (result.data && result.data.code === 200) {
             console.log(result.data.data.list.length)
