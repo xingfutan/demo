@@ -11,7 +11,7 @@
         </div>
         <div>{{ranking2.mb_nickname || '无'}}</div>
         <div>第二名</div>
-        <div class="portrait_button" @click="showGiveModal(ranking2.id)" v-show='type === "charm" || type === "gold"'>
+        <div class="portrait_button" @click="showGiveModal(ranking2.id)">
           赠送
         </div>
       </div>
@@ -21,7 +21,7 @@
         </div>
         <div>{{ranking1.mb_nickname || '无'}}</div>
         <div>第一名</div>
-        <div class="portrait_button" @click="showGiveModal(ranking1.id)" v-show='type === "charm" || type === "gold"'>
+        <div class="portrait_button" @click="showGiveModal(ranking1.id)">
           赠送
         </div>
       </div>
@@ -31,7 +31,7 @@
         </div>
         <div>{{ranking3.mb_nickname || '无'}}</div>
         <div>第三名</div>
-        <div class="portrait_button" @click="showGiveModal(ranking3.id)" v-show='type === "charm" || type === "gold"'>
+        <div class="portrait_button" @click="showGiveModal(ranking3.id)">
           赠送
         </div>
       </div>
@@ -47,7 +47,7 @@
             <div class="rankingDistance">距离前一名{{index ? rankingOther[index-1][`mb_${type}`] - ranking[`mb_${type}`] :
               ranking3[`mb_${type}`] - ranking[`mb_${type}`]}}{{typeName}}
             </div>
-            <div class="raningSend" @click="showGiveModal(ranking.id)" v-show='type === "charm" || type === "gold"'>赠
+            <div class="raningSend" @click="showGiveModal(ranking.id)">赠
             </div>
           </div>
         </li>
@@ -59,12 +59,10 @@
       <div class="nav-item nav-item-left" @click="getRanking('power')">战力</div>
     </div>
     <give :visible.sync='show_give_charm' @hide-give='show_give_charm = false' ref='give-charm'></give>
-    <give-gold :visible.sync='show_give_gold' @hide-give='show_give_gold = false' ref='give-gold'></give-gold>
   </div>
 </template>
 <script>
   import Give from './KGive.vue'
-  import GiveGold from './GiveGold.vue'
   export default {
     data () {
       return {
@@ -78,8 +76,7 @@
       }
     },
     components: {
-      Give,
-      GiveGold
+      Give
     },
     computed: {
       typeName: function () {
@@ -109,12 +106,16 @@
         }).catch(window.alert);
       },
       showGiveModal(id){
-        this.$refs[`give-${this.type}`].member_id = id
-        this[`show_give_${this.type}`] = true
+        this.$refs[`give-charm`].member_id = id
+        this[`show_give_charm`] = true
       }
     },
     beforeMount() {
-      this.getRanking('gold');
+      let tag = 'gold'
+      if(this.$route.query && this.$route.query.tag){
+        tag = this.$route.query.tag
+      }
+      this.getRanking(tag)
     }
   }
 </script>

@@ -9,8 +9,8 @@
       <div class="icon-bar-item icon-bar-more">账单记录</div>
     </div>
     <div class="info-board">
-      <div class="info-board-body">{{balance_count}}</div>
-      <div class="info-board-more">消耗星空时间：{{balance_time}}分钟</div>
+      <div class="info-board-body">{{balance_count}}K币</div>
+      <div class="info-board-more">已使用星空时间：{{balance_time}}分钟</div>
     </div>
     <div class="icon-bar">
       <div class="icon-bar-item icon-bar-title">财力排行榜</div>
@@ -18,7 +18,7 @@
     <div class="info-board">
       <div class="info-board-body">{{ranking_prize}}</div>
       <div class="info-board-unit">位</div>
-      <div class="info-board-more ranking-more">查看完整排名</div>
+      <div class="info-board-more ranking-more" @click="$router.push('/ranking?tag=gold')">查看完整排名</div>
     </div>
     <div class="nav">
       <div class="nav-item nav-item-left" @click="show_recharge = true">充值</div>
@@ -103,7 +103,6 @@
   }
 
   .ranking-more {
-    margin-top: 60px;
     text-align: right;
   }
 
@@ -147,7 +146,7 @@
   }
 </style>
 <script>
-  import GiveGold from './GiveGold.vue'
+  import GiveGold from './KGive.vue'
   import Recharge from './Recharge.vue'
   export default {
     name: 'management',
@@ -168,7 +167,7 @@
       this.axios.get('/user/gold').then(result => {
         if (result.data && result.data.code === 200) {
           this.balance_count = result.data.data.mb_gold;
-          this.balance_time = result.data.data.pay_per_minute;
+          this.balance_time = result.data.data.pay_per_minute ? Math.ceil(result.data.data.pay_per_minute) : 0;
           this.ranking_prize = result.data.data.rank;
         }
       }).catch(window.alert);
