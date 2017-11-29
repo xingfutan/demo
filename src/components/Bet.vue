@@ -15,15 +15,15 @@
             <div class="modal-body">
               <slot name="body">
                 <div>
-                  房间id：{{s_room_id}}
+                  场次：{{s_room_id}}
                 </div>
                 <div>
-                  K币数：<input type='text' placeholder="请输入K币数量" v-model="s_stake">
+                  押注队伍：{{s_team === 'red' ? '红方' : '蓝方'}}
+                </div>
+                <div>
+                  <input type='text' placeholder="请输入K币数量" v-model="s_stake">
                 </div>
                 <br>
-                <div>
-                押注队伍：{{s_team}}
-                </div>
               </slot>
             </div>
             <div class="modal-footer">

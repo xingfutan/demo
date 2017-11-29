@@ -6,10 +6,10 @@
     </div>
     <div class="icon-bar">
       <div class="icon-bar-item icon-bar-title">K币余额</div>
-      <div class="icon-bar-item icon-bar-more">投注记录</div>
+      <div class="icon-bar-item icon-bar-more" @click="$router.push('/bill')">投注记录</div>
     </div>
     <div class="info-board">
-      <div class="info-board-body">{{gold}}</div>
+      <div class="info-board-body">{{gold}}K币</div>
     </div>
     <div>
       <div class="vs" v-for="game in games">
@@ -17,39 +17,40 @@
           <div class="vs-left-title">蓝方</div>
           <div class="vs-left-list">
             <ul v-if="game.members && game.members.length">
-              <li><img class="vs-icon" :src="game.members[0].mb_avatar_url"/>{{game.members[0].mb_nickname}}</li>
-              <li><img class="vs-icon" :src="game.members[1].mb_avatar_url"/>{{game.members[1].mb_nickname}}</li>
-              <li><img class="vs-icon" :src="game.members[2].mb_avatar_url"/>{{game.members[2].mb_nickname}}</li>
-              <li><img class="vs-icon" :src="game.members[3].mb_avatar_url"/>{{game.members[3].mb_nickname}}</li>
-              <li><img class="vs-icon" :src="game.members[4].mb_avatar_url"/>{{game.members[4].mb_nickname}}</li>
+              <li><img class="vs-icon" @click="showUserInfo(game.members[0].rm_member_id)" :src="game.members[0].mb_avatar_url"/>{{getLevel(game.members[0].mb_highest_game_lv)}}</li>
+              <li><img class="vs-icon" @click="showUserInfo(game.members[1].rm_member_id)" :src="game.members[1].mb_avatar_url"/>{{getLevel(game.members[1].mb_highest_game_lv)}}</li>
+              <li><img class="vs-icon" @click="showUserInfo(game.members[2].rm_member_id)" :src="game.members[2].mb_avatar_url"/>{{getLevel(game.members[2].mb_highest_game_lv)}}</li>
+              <li><img class="vs-icon" @click="showUserInfo(game.members[3].rm_member_id)" :src="game.members[3].mb_avatar_url"/>{{getLevel(game.members[3].mb_highest_game_lv)}}</li>
+              <li><img class="vs-icon" @click="showUserInfo(game.members[4].rm_member_id)" :src="game.members[4].mb_avatar_url"/>{{getLevel(game.members[4].mb_highest_game_lv)}}</li>
             </ul>
           </div>
-          <div class="vs-rate">{{game.rateBlue}}倍</div>
+          <div class="vs-rate">{{game.rateBlue && game.rateBlue.toFixed(2)}}倍</div>
           <div class="vs-win" @click="userBet(game.r_id, 'blue')">蓝方胜</div>
         </div>
         <div class="vs-middle">
           <div class="vs-middle-title">{{getStatus(game.r_status)}}</div>
-          <div class="vs-middle-time">08:00</div>
+          <div class="vs-middle-time">场次：{{game.r_id}}</div>
           <div class="vs-middle-icon">V.S</div>
         </div>
         <div class="vs-right">
           <div class="vs-right-title">红方</div>
           <div class="vs-right-list">
             <ul v-if="game.members && game.members.length">
-              <li>{{game.members[5].mb_nickname}}<img class="vs-icon" :src="game.members[5].mb_avatar_url"/></li>
-              <li>{{game.members[6].mb_nickname}}<img class="vs-icon" :src="game.members[6].mb_avatar_url"/></li>
-              <li>{{game.members[7].mb_nickname}}<img class="vs-icon" :src="game.members[7].mb_avatar_url"/></li>
-              <li>{{game.members[8].mb_nickname}}<img class="vs-icon" :src="game.members[8].mb_avatar_url"/></li>
-              <li>{{game.members[9].mb_nickname}}<img class="vs-icon" :src="game.members[9].mb_avatar_url"/></li>
+              <li>{{getLevel(game.members[5].mb_highest_game_lv)}}<img class="vs-icon" @click="showUserInfo(game.members[5].rm_member_id)" :src="game.members[5].mb_avatar_url"/></li>
+              <li>{{getLevel(game.members[6].mb_highest_game_lv)}}<img class="vs-icon" @click="showUserInfo(game.members[6].rm_member_id)" :src="game.members[6].mb_avatar_url"/></li>
+              <li>{{getLevel(game.members[7].mb_highest_game_lv)}}<img class="vs-icon" @click="showUserInfo(game.members[7].rm_member_id)" :src="game.members[7].mb_avatar_url"/></li>
+              <li>{{getLevel(game.members[8].mb_highest_game_lv)}}<img class="vs-icon" @click="showUserInfo(game.members[8].rm_member_id)" :src="game.members[8].mb_avatar_url"/></li>
+              <li>{{getLevel(game.members[9].mb_highest_game_lv)}}<img class="vs-icon" @click="showUserInfo(game.members[9].rm_member_id)" :src="game.members[9].mb_avatar_url"/></li>
             </ul>
           </div>
-          <div class="vs-rate">{{game.rateRed}}倍</div>
+          <div class="vs-rate">{{game.rateRed && game.rateRed.toFixed(2)}}倍</div>
           <div class="vs-win" @click="userBet(game.r_id, 'red')">红方胜</div>
         </div>
       </div>
     </div>
     </scroller>
     <bet :visible.sync='showBet' :s_team='win' :s_room_id='room' @hide-give='showBet = false' ref='bet'></bet>
+    <user-info :visible.sync='showUser' :user="user" @hide='showUser = false' ref='userInfo'></user-info>
   </div>
 </template>
 <style scoped>
@@ -148,17 +149,17 @@
     float: left;
     text-align: left;
     margin-left: 3%;
-    width: 30%;
+    width: 35%;
   }
 
   .vs-middle {
-    width: 34%;
+    width: 24%;
     display: inline;
     float: left;
   }
 
   .vs-right {
-    width: 30%;
+    width: 35%;
     list-style: none;
     display: inline;
     float: right;
@@ -195,7 +196,7 @@
   }
 
   .vs-middle-icon {
-    font-size: 160px;
+    font-size: 100px;
     margin-top: 100px;
   }
 
@@ -229,6 +230,9 @@
 </style>
 <script>
   import Bet from './Bet.vue'
+  import {GAMELV} from '../util/dictionary'
+  import UserInfo from './UserInfo'
+
   export default {
     data () {
       return {
@@ -237,18 +241,16 @@
         page: 0,
         showBet: false,
         room: '',
-        win: ''
+        win: '',
+        showUser: false,
+        user: {}
       }
     },
     components: {
       Bet,
+      UserInfo
     },
     beforeMount() {
-//      this.axios.get('/user/gameRoomInfo', {params: {page_index: this.page, page_size: 10}}).then(result => {
-//        if (result.data && result.data.code === 200) {
-//          this.games = result.data.data.list;
-//        }
-//      }).catch(window.alert);
       this.axios.get('/user/gold').then(result => {
         if (result.data && result.data.code === 200) {
           this.gold = result.data.data.mb_gold;
@@ -296,7 +298,7 @@
       getStatus(status){
         switch (status) {
           case 1:
-            return '未开始'
+            return '投资中'
             break
           case 2:
             return '进行中'
@@ -311,6 +313,20 @@
             return '异常'
         }
       },
+      getLevel(level){
+        return GAMELV[level] || '无'
+      },
+      showUserInfo(id){
+        const url = `/user/${id}/userInfo`
+        this.axios.get(url).then(result => {
+          if (result.data && result.data.code === 200 && result.data.status === 'OK' && result.data.data.exist === true) {
+            this.user = result.data.data
+          } else {
+            this.user = {}
+          }
+        }).catch(window.alert);
+        this.showUser = true
+      }
     }
   }
 </script>

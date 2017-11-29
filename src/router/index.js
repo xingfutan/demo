@@ -7,6 +7,7 @@ import KCompetition from '@/components/KCompetition'
 import KRankingList from '@/components/KRankingList'
 import Nav from '@/components/Nav'
 import Gift from '@/components/Gift'
+import Bill from '@/components/Bill'
 
 
 Vue.use(Router)
@@ -48,6 +49,11 @@ export default new Router({
       path: '/gift',
       name: 'Gift',
       component: Gift
+    },
+    {
+      path: '/bill',
+      name: 'BIll',
+      component: Bill
     }
   ]
 })

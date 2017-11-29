@@ -10,6 +10,11 @@ import socketIo from 'socket.io-client'
 import VueSocketio from 'vue-socket.io'
 
 import VueScroller from 'vue-scroller'
+import moment from "moment";
+import VueMomentJS from "vue-momentjs";
+
+Vue.use(VueMomentJS, moment);
+
 Vue.use(VueScroller)
 
 let options = {

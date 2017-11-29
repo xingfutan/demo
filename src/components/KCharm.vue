@@ -4,16 +4,23 @@
       <div class="title-text">魅力星尘</div>
     </div>
     <div class="icon-bar">
+      <div class="icon-bar-item icon-bar-title">剩余星尘</div>
+    </div>
+    <div class="info-board">
+      <div class="info-board-body">{{mb_stardust}}星尘</div>
+    </div>
+    <div class="icon-bar">
       <div class="icon-bar-item icon-bar-title">当前魅力值</div>
     </div>
     <div class="info-board">
-      <div class="info-board-body">{{charm_count}}星尘</div>
+      <div class="info-board-body">{{mb_charm}}</div>
     </div>
     <div class="icon-bar">
       <div class="icon-bar-item icon-bar-title">魅力榜排名</div>
     </div>
     <div class="info-board">
-      <div class="info-board-body">{{charm_ranking_prize}}</div>
+      <div class="info-board-body">{{charmRank}}</div>
+      <div class="info-board-unit">位</div>
       <div class="info-board-more ranking-more" @click="$router.push('/ranking?tag=charm')">查看完整排名</div>
     </div>
     <div class="nav">
@@ -68,13 +75,14 @@
   }
 
   .info-board {
-    height: 360px;
+    height: 160px;
     width: auto;
     color: #fff;
     margin-right: 20px;
     margin-left: 20px;
-    margin-top: 100px;
+    margin-top: 80px;
     font-weight:bold;
+    position: relative;
   }
 
   .info-board-body {
@@ -103,7 +111,6 @@
   }
 
   .ranking-more {
-    margin-top: 60px;
     text-align: right;
   }
 
@@ -146,14 +153,28 @@
     background-color: #C8C6C6;
   }
 
+  .info-board-unit {
+    color: #1DACD9;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+    position: absolute;
+    border:2px solid #1DACD9;
+    border-radius: 20px;
+    top: 0px;
+    right: 250px
+  }
+
 </style>
 <script>
   import Give from './KGive.vue'
   export default {
     data () {
       return {
-        charm_count: '***',
-        charm_ranking_prize: '***',
+        mb_charm: '***',
+        charmRank: '***',
+        mb_stardust: '***',
         show_give: false,
       }
     },
@@ -161,11 +182,12 @@
       Give,
     },
     beforeMount() {
-      this.axios.get('/user/charm').then(result => {
+      this.axios.get('/user/baseInfo').then(result => {
         if(result.data && result.data.code === 200){
           console.log(result.data)
-          this.charm_count = result.data.data.mb_charm;
-          this.charm_ranking_prize = result.data.data.rank;
+          this.mb_charm = result.data.data.mb_charm;
+          this.charmRank = result.data.data.charmRank;
+          this.mb_stardust = result.data.data.mb_stardust;
         }
       }).catch(window.alert);
     }

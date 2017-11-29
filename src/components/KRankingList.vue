@@ -1,82 +1,87 @@
 <template>
   <div class="container">
-    <div class="title">
-      <div class="title-text">排行榜</div>
-    </div>
-    <div class="header">魅力榜</div>
-    <div class="portrait">
-      <div class="portrait_div">
-        <div class="portrait_icon">
-          <img src="../assets/icon.jpeg">
-        </div>
-        <div>{{ranking2.mb_nickname || '无'}}</div>
-        <div>第二名</div>
-        <div class="portrait_button" @click="showGiveModal(ranking2.id)">
-          赠送
-        </div>
+    <scroller :on-infinite="infinite" ref='scroller1'>
+      <div class="title">
+        <div class="title-text">排行榜</div>
       </div>
-      <div class="portrait_div_large">
-        <div class="portrait_icon_large">
-          <img src="../assets/icon.jpeg">
-        </div>
-        <div>{{ranking1.mb_nickname || '无'}}</div>
-        <div>第一名</div>
-        <div class="portrait_button" @click="showGiveModal(ranking1.id)">
-          赠送
-        </div>
-      </div>
-      <div class="portrait_div">
-        <div class="portrait_icon">
-          <img src="../assets/icon.jpeg">
-        </div>
-        <div>{{ranking3.mb_nickname || '无'}}</div>
-        <div>第三名</div>
-        <div class="portrait_button" @click="showGiveModal(ranking3.id)">
-          赠送
-        </div>
-      </div>
-    </div>
-
-    <div class="rankingList" v-if='rankingOther.length'>
-      <ul v-for='(ranking, index ) in rankingOther'>
-        <li>
-          <div class="rankingItem">
-            <div class="rankingIndex">{{index + 4}}</div>
-            <div class="rankingIcon"><img class="other-icon" src="../assets/icon.jpeg"></div>
-            <div class="rankingNickname">{{ranking.mb_nickname}}</div>
-            <div class="rankingDistance">距离前一名{{index ? rankingOther[index-1][`mb_${type}`] - ranking[`mb_${type}`] :
-              ranking3[`mb_${type}`] - ranking[`mb_${type}`]}}{{typeName}}
-            </div>
-            <div class="raningSend" @click="showGiveModal(ranking.id)">赠
-            </div>
+      <div class="header">{{title}}</div>
+      <div class="portrait" v-if='rankingList.length'>
+        <div class="portrait_div">
+          <div class="portrait_icon">
+            <img :src="rankingList[1].mb_avatar_url" @click="showUserInfo(rankingList[1].mb_uuid)">
           </div>
-        </li>
-      </ul>
-    </div>
-    <div class="nav">
-      <div class="nav-item nav-item-left" @click="getRanking('gold')">财力</div>
-      <div class="nav-item nav-item-right" @click="getRanking('charm')">魅力</div>
-      <div class="nav-item nav-item-left" @click="getRanking('power')">战力</div>
-    </div>
+          <div>{{rankingList[1].mb_nickname || '无'}}</div>
+          <div>第二名</div>
+          <div class="portrait_button" @click="showGiveModal(rankingList[1].mb_uuid)">
+            赠送
+          </div>
+        </div>
+        <div class="portrait_div_large">
+          <div class="portrait_icon_large">
+            <img :src="rankingList[0].mb_avatar_url" @click="showUserInfo(rankingList[0].mb_uuid)">
+          </div>
+          <div>{{rankingList[0].mb_nickname || '无'}}</div>
+          <div>第一名</div>
+          <div class="portrait_button" @click="showGiveModal(rankingList[0].mb_uuid)">
+            赠送
+          </div>
+        </div>
+        <div class="portrait_div">
+          <div class="portrait_icon">
+            <img :src="rankingList[2].mb_avatar_url" @click="showUserInfo(rankingList[2].mb_uuid)">
+          </div>
+          <div>{{rankingList[2].mb_nickname || '无'}}</div>
+          <div>第三名</div>
+          <div class="portrait_button" @click="showGiveModal(rankingList[2].mb_uuid)">
+            赠送
+          </div>
+        </div>
+      </div>
+
+      <div class="rankingList" v-if='rankingList.length > 3'>
+        <ul v-for='(ranking, index ) in rankingList'>
+          <li v-if="index > 2">
+            <div class="rankingItem">
+              <div class="rankingIndex">{{index + 1}}</div>
+              <div class="rankingIcon"><img class="other-icon" @click="showGiveModal(rranking.mb_uuid)" :src="ranking.mb_avatar_url"></div>
+              <div class="rankingNickname">{{ranking.mb_nickname}}</div>
+              <div class="rankingDistance">距离前一名{{rankingList[index-1][`mb_${type}`] - ranking[`mb_${type}`]}}{{typeName}}
+              </div>
+              <div class="raningSend" @click="showGiveModal(ranking.mb_uuid)">赠
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </scroller>
+      <div class="nav">
+        <div class="nav-item nav-item-left" @click="getRanking('gold')">财力</div>
+        <div class="nav-item nav-item-right" @click="getRanking('charm')">魅力</div>
+        <div class="nav-item nav-item-left" @click="getRanking('power')">战力</div>
+      </div>
     <give :visible.sync='show_give_charm' @hide-give='show_give_charm = false' ref='give-charm'></give>
+    <user-info :visible.sync='showUser' :user="user" @hide='showUser = false' ref='userInfo'></user-info>
   </div>
 </template>
 <script>
   import Give from './KGive.vue'
+  import UserInfo from './UserInfo'
   export default {
     data () {
       return {
         type: '',
-        ranking1: '',
-        ranking2: '',
-        ranking3: '',
-        rankingOther: [],
+        page: 0,
+        rankingList: [],
         show_give_charm: false,
         show_give_gold: false,
+        showUser: false,
+        user: {}
       }
     },
+
     components: {
-      Give
+      Give,
+      UserInfo
     },
     computed: {
       typeName: function () {
@@ -90,32 +95,61 @@
           default:
             return 'K币'
         }
+      },
+      title: function () {
+        switch (this.type) {
+          case 'power':
+            return '战力榜'
+            break
+          case 'charm':
+            return '魅力榜'
+            break
+          default:
+            return '财力榜'
+        }
       }
     },
     methods: {
-      getRanking(type){
-        this.axios.get(`/user/top/${type}`).then(result => {
+      infinite(done){
+        if(this.page === null) return done()
+        this.axios.get(`/user/top/${this.type}`, {params: {page_index: this.page + 1, page_size: 10}}).then(result => {
           if (result.data && result.data.code === 200) {
-            console.log(type)
-            this.type = type;
-            this.ranking1 = result.data.data[0] || {};
-            this.ranking2 = result.data.data[1] || {};
-            this.ranking3 = result.data.data[2] || {};
-            this.rankingOther = result.data.data.slice(3);
+            console.log(result.data.data.list.length)
+            this.rankingList = this.rankingList.concat(result.data.data.list)
+            this.page += 1
+            if(result.data.data.list.length < 10){
+              this.page = null
+            }
+            done()
           }
-        }).catch(window.alert);
+        }).catch(window.alert)
+      },
+      getRanking(type){
+        this.rankingList = []
+        this.type = type
+        this.page = 0
       },
       showGiveModal(id){
         this.$refs[`give-charm`].member_id = id
         this[`show_give_charm`] = true
+      },
+      showUserInfo(id){
+        const url = `/user/${id}/userInfo`
+        this.axios.get(url).then(result => {
+          if (result.data && result.data.code === 200 && result.data.status === 'OK' && result.data.data.exist === true) {
+            this.user = result.data.data
+          } else {
+            this.user = {}
+          }
+        }).catch(window.alert);
+        this.showUser = true
       }
     },
     beforeMount() {
-      let tag = 'gold'
-      if(this.$route.query && this.$route.query.tag){
-        tag = this.$route.query.tag
+      this.type = 'gold'
+      if (this.$route.query && this.$route.query.tag) {
+        this.type = this.$route.query.tag
       }
-      this.getRanking(tag)
     }
   }
 </script>
@@ -175,8 +209,9 @@
 
   .portrait_button {
     color: #ffffff;
-    border: 1px solid #ffffff;
+    border: 2px solid #ffffff;
     margin: 10px 15% 10px 15%;
+    border-radius: 10px;
   }
 
   .rankingList {
@@ -234,7 +269,7 @@
     width: 45%;
     font-size: 20px;
     text-overflow: ellipsis;
-    white-space:nowrap;
+    white-space: nowrap;
     overflow: hidden;
   }
 
@@ -243,7 +278,8 @@
     float: left;
     width: 10%;
   }
-  .rankingIcon{
+
+  .rankingIcon {
     display: inline;
     float: left;
     width: 15%;
@@ -259,7 +295,7 @@
     line-height: 80px;
     width: 100%;
     text-align: center;
-    position: fixed;
+    position: absolute;
     bottom: 0;
     color: #fff;
     font-weight: bold;
@@ -292,6 +328,7 @@
     color: white;
     background-color: #C8C6C6;
   }
+
 
 
 </style>

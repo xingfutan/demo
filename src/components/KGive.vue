@@ -19,16 +19,18 @@
                        v-bind:class="{give_body: !option.onSelect, give_body_active: option.onSelect}"
                        @click="onSelect(index)">
                     <div class="give_body_div">
-                      <div><img src="../assets/a.png"/></div>
+                      <div><img class="give_body_logo" src="../assets/a.png"/></div>
                       <div>{{option.dust}}</div>
-                      <div>星尘</div>
-                      <div>{{option.kCorn}}k币</div>
+                      <div v-if="index < 4">星尘</div>
+                      <div v-if="index === 4">星云</div>
+                      <div v-if="index === 5">星空</div>
+                      <div>消耗{{option.kCorn}}K币</div>
                     </div>
                   </div>
                 </div>
                 <br>
-                <div>
-                  接收人：<input type='text' placeholder="请输入会员卡号" v-model="member_id" @input="getUserName">
+                <div class="user-input-container">
+                  接收人：<input class="user-input" type='text' placeholder="请输入会员卡号" v-model="member_id" @input="getUserName">
                   <span>{{user_name}}</span>
                 </div>
               </slot>
@@ -89,7 +91,7 @@
       },
       getUserName() {
         this.user_name = '';
-        if (this.member_id) {
+        if (this.member_id && this.member_id.length === 8) {
           this.axios.get(`/user/${this.member_id}/nickname`).then(result => {
             if (result.data && result.data.code === 200) {
               if(result.data.data && result.data.data.exist) this.user_name = result.data.data.nickname
@@ -135,6 +137,11 @@
     transition: opacity .3s ease;
   }
 
+  .modal-header{
+    font-size: 50px;
+    font-weight: bold;
+  }
+
   .modal-wrapper {
     display: table-cell;
     vertical-align: middle;
@@ -151,18 +158,8 @@
     font-family: Helvetica, Arial, sans-serif;
   }
 
-  .modal-header h3 {
-    margin-top: 0;
-    color: #42b983;
-    text-align: left;
-    width: auto;
-    border-bottom: 1px solid #ccc;
-    font-size: 50px;
-    line-height: 40px;
-  }
-
   .modal-body {
-    margin: 20px 0;
+    margin: 40px 0;
   }
 
   .modal-footer {
@@ -175,6 +172,7 @@
     float: right;
     line-height: 0.8rem;
     font-size: 0.24rem;
+    border: 1px solid gray;
   }
 
   .give_body_container {
@@ -184,6 +182,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
+    font-size: 30px;
   }
 
   .give_body_container .give_body {
@@ -238,6 +237,19 @@
     margin-right: 0.2rem;
   }
 
+  .give_body_logo{
+    width: 100px;
+    height: 100px;
+    margin: 10px auto;
+  }
+
+  .user-input{
+    border: 1px solid gray;
+  }
+
+  .user-input-container{
+    font-size: 30px;
+  }
   /*
    * The following styles are auto-applied to elements with
    * transition="modal" when their visibility is toggled

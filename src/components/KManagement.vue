@@ -6,17 +6,23 @@
     <div class="icon-bar">
       <div class="icon-bar-item icon-bar-title">K币余额</div>
       <div class="icon-bar-item icon-bar-more">费用规则</div>
-      <div class="icon-bar-item icon-bar-more">账单记录</div>
+      <div class="icon-bar-item icon-bar-more" @click="$router.push('/bill?type=gold')">账单记录</div>
     </div>
     <div class="info-board">
-      <div class="info-board-body">{{balance_count}}K币</div>
-      <div class="info-board-more">已使用星空时间：{{balance_time}}分钟</div>
+      <div class="info-board-body">{{mb_gold}}K币</div>
+      <div class="info-board-more">已使用星空时间：{{consumeTime}}分钟</div>
+    </div>
+    <div class="icon-bar">
+      <div class="icon-bar-item icon-bar-title">财力值</div>
+    </div>
+    <div class="info-board">
+      <div class="info-board-body">{{mb_gold_heapup}}</div>
     </div>
     <div class="icon-bar">
       <div class="icon-bar-item icon-bar-title">财力排行榜</div>
     </div>
     <div class="info-board">
-      <div class="info-board-body">{{ranking_prize}}</div>
+      <div class="info-board-body">{{goldRank}}</div>
       <div class="info-board-unit">位</div>
       <div class="info-board-more ranking-more" @click="$router.push('/ranking?tag=gold')">查看完整排名</div>
     </div>
@@ -72,13 +78,14 @@
   }
 
   .info-board {
-    height: 360px;
+    height: 200px;
     width: auto;
     color: #fff;
     margin-right: 20px;
     margin-left: 20px;
-    margin-top: 100px;
+    margin-top: 60px;
     font-weight:bold;
+    position: relative;
   }
 
   .info-board-body {
@@ -91,11 +98,11 @@
     height: 40px;
     line-height: 40px;
     font-size: 20px;
-    position: relative;
+    position: absolute;
     border:2px solid #1DACD9;
-    top: -45%;
-    left: 55%;
     border-radius: 20px;
+    top: 0px;
+    right: 250px
   }
 
   .info-board-more {
@@ -156,19 +163,21 @@
     },
     data () {
       return {
-        balance_count: '***',
-        balance_time: '***',
-        ranking_prize: '***',
+        mb_gold: '***',
+        mb_gold_heapup: '***',
+        consumeTime: '***',
+        goldRank: '***',
         show_recharge: false,
         show_give: false,
       }
     },
     beforeMount() {
-      this.axios.get('/user/gold').then(result => {
+      this.axios.get('/user/baseInfo').then(result => {
         if (result.data && result.data.code === 200) {
-          this.balance_count = result.data.data.mb_gold;
-          this.balance_time = result.data.data.pay_per_minute ? Math.ceil(result.data.data.pay_per_minute) : 0;
-          this.ranking_prize = result.data.data.rank;
+          this.mb_gold = result.data.data.mb_gold;
+          this.consumeTime = result.data.data.consumeTime ? Math.ceil(result.data.data.consumeTime / 60) : 0;
+          this.goldRank = result.data.data.goldRank;
+          this.mb_gold_heapup = result.data.data.mb_gold_heapup;
         }
       }).catch(window.alert);
     }
