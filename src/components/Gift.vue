@@ -46,9 +46,9 @@
   .good-item {
     color: #ffffff;
     height: 150px;
-    border: 1px solid #1DACD9;
-    margin-top: 10px;
     line-height: 150px;
+    border-top: 2px solid #03587C;
+    background-color: #231927;
   }
 
   .good-item div {
