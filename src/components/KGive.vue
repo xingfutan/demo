@@ -173,6 +173,7 @@
     line-height: 0.8rem;
     font-size: 0.24rem;
     border: 1px solid gray;
+    border-radius: 20px;
   }
 
   .give_body_container {

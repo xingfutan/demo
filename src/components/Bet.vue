@@ -20,9 +20,15 @@
                 <div>
                   押注队伍：{{s_team === 'red' ? '红方' : '蓝方'}}
                 </div>
-                <div>
-                  <input type='text' placeholder="请输入K币数量" v-model="s_stake">
+                <div class="stake-num">
+                  {{s_stake}}
                 </div>
+                <div class="stake">
+                  <div class="stake-btn" @click="s_stake >= 10000 ? s_stake -= 10000 : s_stake = 0">-10000</div>
+                  <div class="stake-btn" @click="s_stake >= 100 ? s_stake -= 100 : s_stake = 0">-100</div>
+                  <div class="stake-btn" @click="s_stake += 100">+100</div>
+                  <div class="stake-btn" @click="s_stake += 10000">+10000</div>
+                  </div>
                 <br>
               </slot>
             </div>
@@ -57,7 +63,7 @@
     },
     data() {
       return {
-        s_stake: ''
+        s_stake: 0
       }
     },
     methods: {
@@ -99,13 +105,18 @@
 
   .modal-container {
     width: auto;
-    margin: 0.4rem;
-    padding: 0.2rem 0.3rem;
+    margin: 40px;
+    padding: 20px 30px;
     background-color: #fff;
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
     transition: all .3s ease;
     font-family: Helvetica, Arial, sans-serif;
+  }
+
+  .modal-header{
+    font-size: 50px;
+    font-weight: bold;
   }
 
   .modal-header h3 {
@@ -117,81 +128,44 @@
 
   .modal-body {
     margin: 20px 0;
+    font-size: 30px;
   }
 
   .modal-footer {
-    margin: 0.2rem 0;
-    height: 0.8rem;
+    margin: 20px 0;
+    height: 80px;
     position: relative;
   }
 
   .modal-default-button {
     float: right;
-    line-height: 0.8rem;
-    font-size: 0.24rem;
+    line-height: 80px;
+    font-size: 24px;
+    border: 1px solid gray;
+    border-radius: 20px;
   }
 
-  .give_body_container {
-    display: flex;
-    display: -webkit-flex;
-    width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
+  .stake{
+    margin-top: 50px;
   }
 
-  .give_body_container .give_body {
-    width: 32%;
-    height: 3rem;
-    border: 1px solid #ccc;
-    margin-bottom: 0.2rem;
+  .stake-btn{
+    font-size: 30px;
+    font-weight: bold;
+    display: inline-block;
+    width: 18%;
+    height: 50px;
+    line-height: 50px;
+    border: 2px solid gray;
+    border-radius: 10px;
+    margin: 0 10px;
   }
 
-  .give_body_container .give_body_active {
-    width: 32%;
-    height: 3rem;
-    border: 2px solid blue;
-    margin-bottom: 0.2rem;
+  .stake-num{
+    margin-top: 50px;
+    font-size: 80px;
+    font-weight: bold;
   }
-
-  .give_body_container .give_body .give_body_div {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: no-wrap;
-    align-content: space-between;
-  }
-
-  .give_body_container .give_body .give_body_div div:first-child {
-    height: 1.4rem;
-    display: flex;
-  }
-
-  .give_body_container .give_body .give_body_div div:nth-child(4) {
-    text-align: right;
-    margin-right: 0.2rem;
-  }
-
-  .give_body_container .give_body_active .give_body_div {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: no-wrap;
-    align-content: space-between;
-  }
-
-  .give_body_container .give_body_active .give_body_div div:first-child {
-    height: 1.4rem;
-    display: flex;
-  }
-
-  .give_body_container .give_body_active .give_body_div div:nth-child(4) {
-    text-align: right;
-    margin-right: 0.2rem;
-  }
-
   /*
    * The following styles are auto-applied to elements with
    * transition="modal" when their visibility is toggled

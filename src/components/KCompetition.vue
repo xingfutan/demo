@@ -1,53 +1,124 @@
 <template>
   <div class="container">
     <scroller :on-infinite="infinite">
-    <div class="title">
-      <div class="title-text">排行榜</div>
-    </div>
-    <div class="icon-bar">
-      <div class="icon-bar-item icon-bar-title">K币余额</div>
-      <div class="icon-bar-item icon-bar-more" @click="$router.push('/bill')">投注记录</div>
-    </div>
-    <div class="info-board">
-      <div class="info-board-body">{{gold}}K币</div>
-    </div>
-    <div>
-      <div class="vs" v-for="game in games">
-        <div class="vs-left">
-          <div class="vs-left-title">蓝方</div>
-          <div class="vs-left-list">
-            <ul v-if="game.members && game.members.length">
-              <li><img class="vs-icon" @click="showUserInfo(game.members[0].rm_member_id)" :src="game.members[0].mb_avatar_url"/>{{getLevel(game.members[0].mb_highest_game_lv)}}</li>
-              <li><img class="vs-icon" @click="showUserInfo(game.members[1].rm_member_id)" :src="game.members[1].mb_avatar_url"/>{{getLevel(game.members[1].mb_highest_game_lv)}}</li>
-              <li><img class="vs-icon" @click="showUserInfo(game.members[2].rm_member_id)" :src="game.members[2].mb_avatar_url"/>{{getLevel(game.members[2].mb_highest_game_lv)}}</li>
-              <li><img class="vs-icon" @click="showUserInfo(game.members[3].rm_member_id)" :src="game.members[3].mb_avatar_url"/>{{getLevel(game.members[3].mb_highest_game_lv)}}</li>
-              <li><img class="vs-icon" @click="showUserInfo(game.members[4].rm_member_id)" :src="game.members[4].mb_avatar_url"/>{{getLevel(game.members[4].mb_highest_game_lv)}}</li>
-            </ul>
+      <div class="title">
+        <div class="title-text">排行榜</div>
+      </div>
+      <div class="icon-bar">
+        <div class="icon-bar-item icon-bar-title">K币余额</div>
+        <div class="icon-bar-item icon-bar-more" @click="$router.push('/bill?type=gold_stake')">投注记录</div>
+      </div>
+      <div class="info-board">
+        <div class="info-board-body">{{gold}}K币</div>
+      </div>
+      <div>
+        <div class="vs" v-for="game in games">
+          <div class="vs-left">
+            <div class="vs-left-title">蓝方</div>
+            <div class="vs-left-list">
+              <ul v-if="game.members && game.members.length">
+                <li>
+                  <img class="vs-icon-left" @click="showUserInfo(game.members[0].rm_member_id)"
+                       :src="game.members[0].mb_avatar_url"/>
+                  <div class="member-info-left">
+                    <div v-if="game.r_status === 3">{{game.members[0].rm_gift}}</div>
+                    <div>{{getLevel(game.members[0].mb_highest_game_lv)}}</div>
+                  </div>
+                </li>
+                <li><img class="vs-icon-left" @click="showUserInfo(game.members[1].rm_member_id)"
+                         :src="game.members[1].mb_avatar_url"/>
+                  <div class="member-info-left">
+                    <div v-if="game.r_status === 3">{{game.members[1].rm_gift}}</div>
+                    <div>{{getLevel(game.members[1].mb_highest_game_lv)}}</div>
+                  </div>
+                </li>
+                <li><img class="vs-icon-left" @click="showUserInfo(game.members[2].rm_member_id)"
+                         :src="game.members[2].mb_avatar_url"/>
+                  <div class="member-info-left">
+                    <div v-if="game.r_status === 3">{{game.members[2].rm_gift}}</div>
+                    <div>{{getLevel(game.members[2].mb_highest_game_lv)}}</div>
+                  </div>
+                </li>
+                <li><img class="vs-icon-left" @click="showUserInfo(game.members[3].rm_member_id)"
+                         :src="game.members[3].mb_avatar_url"/>
+                  <div class="member-info-left">
+                    <div v-if="game.r_status === 3">{{game.members[3].rm_gift}}</div>
+                    <div>{{getLevel(game.members[3].mb_highest_game_lv)}}</div>
+                  </div>
+                </li>
+                <li><img class="vs-icon-left" @click="showUserInfo(game.members[4].rm_member_id)"
+                         :src="game.members[4].mb_avatar_url"/>
+                  <div class="member-info-left">
+                    <div v-if="game.r_status === 3">{{game.members[4].rm_gift}}</div>
+                    <div>{{getLevel(game.members[4].mb_highest_game_lv)}}</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="vs-rate">{{game.rateBlue && game.rateBlue.toFixed(2)}}倍</div>
+            <div class="vs-win" @click="userBet(game.r_id, 'blue')">蓝方胜</div>
           </div>
-          <div class="vs-rate">{{game.rateBlue && game.rateBlue.toFixed(2)}}倍</div>
-          <div class="vs-win" @click="userBet(game.r_id, 'blue')">蓝方胜</div>
-        </div>
-        <div class="vs-middle">
-          <div class="vs-middle-title">{{getStatus(game.r_status)}}</div>
-          <div class="vs-middle-time">场次：{{game.r_id}}</div>
-          <div class="vs-middle-icon">V.S</div>
-        </div>
-        <div class="vs-right">
-          <div class="vs-right-title">红方</div>
-          <div class="vs-right-list">
-            <ul v-if="game.members && game.members.length">
-              <li>{{getLevel(game.members[5].mb_highest_game_lv)}}<img class="vs-icon" @click="showUserInfo(game.members[5].rm_member_id)" :src="game.members[5].mb_avatar_url"/></li>
-              <li>{{getLevel(game.members[6].mb_highest_game_lv)}}<img class="vs-icon" @click="showUserInfo(game.members[6].rm_member_id)" :src="game.members[6].mb_avatar_url"/></li>
-              <li>{{getLevel(game.members[7].mb_highest_game_lv)}}<img class="vs-icon" @click="showUserInfo(game.members[7].rm_member_id)" :src="game.members[7].mb_avatar_url"/></li>
-              <li>{{getLevel(game.members[8].mb_highest_game_lv)}}<img class="vs-icon" @click="showUserInfo(game.members[8].rm_member_id)" :src="game.members[8].mb_avatar_url"/></li>
-              <li>{{getLevel(game.members[9].mb_highest_game_lv)}}<img class="vs-icon" @click="showUserInfo(game.members[9].rm_member_id)" :src="game.members[9].mb_avatar_url"/></li>
-            </ul>
+          <div class="vs-middle">
+            <div class="vs-middle-title">{{getStatus(game.r_status)}}</div>
+            <div class="vs-middle-time">场次：{{game.r_id}}</div>
+            <div class="vs-middle-icon">V.S</div>
           </div>
-          <div class="vs-rate">{{game.rateRed && game.rateRed.toFixed(2)}}倍</div>
-          <div class="vs-win" @click="userBet(game.r_id, 'red')">红方胜</div>
+          <div class="vs-right">
+            <div class="vs-right-title">红方</div>
+            <div class="vs-right-list">
+              <ul v-if="game.members && game.members.length">
+                <li>
+                  <img class="vs-icon-right"
+                       @click="showUserInfo(game.members[5].rm_member_id)"
+                       :src="game.members[5].mb_avatar_url"/>
+                  <div class="member-info-right">
+                    <div v-if="game.r_status === 3">{{game.members[5].rm_gift}}</div>
+                    <div>{{getLevel(game.members[5].mb_highest_game_lv)}}</div>
+                  </div>
+                </li>
+                <li>
+                  <img class="vs-icon-right"
+                       @click="showUserInfo(game.members[6].rm_member_id)"
+                       :src="game.members[6].mb_avatar_url"/>
+                  <div class="member-info-right">
+                    <div v-if="game.r_status === 3">{{game.members[6].rm_gift}}</div>
+                    <div>{{getLevel(game.members[6].mb_highest_game_lv)}}</div>
+                  </div>
+                </li>
+                <li>
+                  <img class="vs-icon-right"
+                       @click="showUserInfo(game.members[7].rm_member_id)"
+                       :src="game.members[7].mb_avatar_url"/>
+                  <div class="member-info-right">
+                    <div v-if="game.r_status === 3">{{game.members[7].rm_gift}}</div>
+                    <div>{{getLevel(game.members[7].mb_highest_game_lv)}}</div>
+                  </div>
+                </li>
+                <li>
+                  <img class="vs-icon-right"
+                       @click="showUserInfo(game.members[8].rm_member_id)"
+                       :src="game.members[8].mb_avatar_url"/>
+                  <div class="member-info-right">
+                    <div v-if="game.r_status === 3">{{game.members[8].rm_gift}}</div>
+                    <div>{{getLevel(game.members[8].mb_highest_game_lv)}}</div>
+                  </div>
+                </li>
+                <li>
+                  <img class="vs-icon-right"
+                       @click="showUserInfo(game.members[9].rm_member_id)"
+                       :src="game.members[9].mb_avatar_url"/>
+                  <div class="member-info-right">
+                    <div v-if="game.r_status === 3">{{game.members[9].rm_gift}}</div>
+                    <div>{{getLevel(game.members[9].mb_highest_game_lv)}}</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="vs-rate">{{game.rateRed && game.rateRed.toFixed(2)}}倍</div>
+            <div class="vs-win" @click="userBet(game.r_id, 'red')">红方胜</div>
+          </div>
         </div>
       </div>
-    </div>
     </scroller>
     <bet :visible.sync='showBet' :s_team='win' :s_room_id='room' @hide-give='showBet = false' ref='bet'></bet>
     <user-info :visible.sync='showUser' :user="user" @hide='showUser = false' ref='userInfo'></user-info>
@@ -97,7 +168,14 @@
     margin-right: 30px;
   }
 
-  .vs-icon {
+  .vs-icon-left {
+    float: left;
+    height: 80px;
+    width: 80px;
+  }
+
+  .vs-icon-right {
+    float: right;
     height: 80px;
     width: 80px;
   }
@@ -227,6 +305,18 @@
   .game-list {
     margin-top: 560px;
   }
+
+  .member-info-left {
+    display: inline;
+    float: left;
+    line-height: 40px;
+  }
+
+  .member-info-right {
+    display: inline;
+    float: right;
+    line-height: 40px;
+  }
 </style>
 <script>
   import Bet from './Bet.vue'
@@ -257,20 +347,20 @@
         }
       }).catch(window.alert);
     },
-    sockets:{
-      connect: function(){
+    sockets: {
+      connect: function () {
         console.log('socket connected')
       },
-      stopBet: function(val){
+      stopBet: function (val) {
         const index = this._.findIndex(this.games, val)
-        if(index !== -1){
+        if (index !== -1) {
           this.games[index].r_status = 2
         }
       },
-      gameOver: function(val){
+      gameOver: function (val) {
         console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)', val)
       },
-      error:function(val){
+      error: function (val) {
         console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)', val)
       }
     },
@@ -281,14 +371,14 @@
         this.showBet = true
       },
       infinite(done){
-        if(this.page === null) return done(true)
-        this.axios.get('/user/gameRoomInfo', {params: {page_index: this.page + 1, page_size: 10}}).then(result => {
+        if (this.page === null) return done(true)
+        this.axios.get('/user/gameRoomInfo', { params: { page_index: this.page + 1, page_size: 10 } }).then(result => {
           if (result.data && result.data.code === 200) {
             console.log(result.data.data.list.length)
             this.games = this.games.concat(result.data.data.list)
             console.log(this.games.length)
             this.page += 1
-            if(result.data.data.list.length < 10){
+            if (result.data.data.list.length < 10) {
               this.page = null
             }
             done()
@@ -298,7 +388,7 @@
       getStatus(status){
         switch (status) {
           case 1:
-            return '投资中'
+            return '投注中'
             break
           case 2:
             return '进行中'

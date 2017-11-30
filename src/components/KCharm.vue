@@ -5,6 +5,7 @@
     </div>
     <div class="icon-bar">
       <div class="icon-bar-item icon-bar-title">剩余星尘</div>
+      <div class="icon-bar-item icon-bar-more" @click="$router.push('/bill?type=stardust')">账单记录</div>
     </div>
     <div class="info-board">
       <div class="info-board-body">{{mb_stardust}}星尘</div>
