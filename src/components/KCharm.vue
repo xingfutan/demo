@@ -81,7 +81,7 @@
     color: #fff;
     margin-right: 20px;
     margin-left: 20px;
-    margin-top: 80px;
+    margin-top: 30px;
     font-weight:bold;
     position: relative;
   }
