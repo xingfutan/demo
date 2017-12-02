@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="title">
-      <div class="title-text">魅力星尘</div>
+      <div class="title-text">会员卡</div>
     </div>
     <div class="cardContainer" v-if="mb_current_vip">
       <img class="card" v-if="card && mb_current_vip === 1" @click="card=!card" src="../assets/vip1.png">

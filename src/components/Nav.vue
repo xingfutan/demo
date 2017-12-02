@@ -2,7 +2,7 @@
   <div class="nav">
     <router-link class="nav-item" to="/charm">魅力</router-link>
     <router-link class="nav-item" to="/management">K币</router-link>
-    <router-link class="nav-item" to="/badge">勋章</router-link>
+    <router-link class="nav-item" to="/badge">会员卡</router-link>
     <router-link class="nav-item" to="/ranking">排行榜</router-link>
     <router-link class="nav-item" to="/competition">竞猜</router-link>
   </div>

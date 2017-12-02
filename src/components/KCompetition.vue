@@ -2,7 +2,7 @@
   <div class="container">
     <scroller :on-infinite="infinite">
       <div class="title">
-        <div class="title-text">排行榜</div>
+        <div class="title-text">竞猜</div>
       </div>
       <div class="icon-bar">
         <div class="icon-bar-item icon-bar-title">K币余额</div>
