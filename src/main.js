@@ -12,6 +12,10 @@ import VueSocketio from 'vue-socket.io'
 import VueScroller from 'vue-scroller'
 import moment from "moment";
 import VueMomentJS from "vue-momentjs";
+import lodash from 'lodash'
+import VueLodash from 'vue-lodash'
+
+Vue.use(VueLodash, lodash)
 
 Vue.use(VueMomentJS, moment);
 

@@ -352,16 +352,28 @@
         console.log('socket connected')
       },
       stopBet: function (val) {
+        console.log(this.games)
         const index = this._.findIndex(this.games, val)
         if (index !== -1) {
           this.games[index].r_status = 2
         }
       },
       gameOver: function (val) {
-        console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)', val)
+        //{r_id:1, win:'red',red:{mvp:1},blue:{mvp:8}}
+        const index = this._.findIndex(this.games, {r_id: val.r_id});
+        if (index !== -1) {
+          this.games[index].r_status = 3
+        }
       },
-      error: function (val) {
-        console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)', val)
+      winRate: function (val) {
+        // {r_id:1,rateRed:1,rateBlue:1,totalRed:0,totalBlue:0}
+        const index = this._.findIndex(this.games, {r_id: val.r_id});
+        if (index !== -1) {
+          this.games[index].rateRed = val.rateRed
+          this.games[index].rateBlue = val.rateBlue
+          this.games[index].totalRed = val.totalRed
+          this.games[index].totalBlue = val.totalBlue
+        }
       }
     },
     methods: {

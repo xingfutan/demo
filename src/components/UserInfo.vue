@@ -202,6 +202,7 @@
   }
 
   .icon{
+    vertical-align:middle;
     width: 80px;
     height: 80px;
   }

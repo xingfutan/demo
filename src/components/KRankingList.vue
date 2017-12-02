@@ -43,7 +43,7 @@
           <li v-if="index > 2">
             <div class="rankingItem">
               <div class="rankingIndex">{{index + 1}}</div>
-              <div class="rankingIcon"><img class="other-icon" @click="showGiveModal(rranking.mb_uuid)" :src="ranking.mb_avatar_url"></div>
+              <div class="rankingIcon"><img class="other-icon" @click="showUserInfo(ranking.mb_uuid)" :src="ranking.mb_avatar_url"></div>
               <div class="rankingNickname">{{ranking.mb_nickname}}</div>
               <div class="rankingDistance">距离前一名{{rankingList[index-1][`mb_${type}`] - ranking[`mb_${type}`]}}{{typeName}}
               </div>
